@@ -1,7 +1,8 @@
 #include <stdbool.h>
 
-bool triangular_inequality(const int a, const int b, const int c)
+bool is_triangle(const int side_a, const int side_b, const int side_c)
 {
-    if(a + b > c && b + c > a && c + a > b) return true;
-    return false;
+    /* Get the triangular inequality state from length of the sides */
+    if(side_a + side_b > side_c && side_b + side_c > side_a && side_c + side_a > side_b) return true; /* This is a triangle */
+    return false; /* Not a triangle */
 }
