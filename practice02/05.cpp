@@ -9,11 +9,12 @@ bool is_two_intervals_overlap(const int a, const int b, const int c, const int d
 
 int main(void)
 {
-    printf("%s\n", is_two_intervals_overlap(1, 3, 5, 6) ? "yes" : "no");
-    printf("%s\n", is_two_intervals_overlap(5, 6, 1, 3) ? "yes" : "no");
-    printf("%s\n", is_two_intervals_overlap(1, 3, 2, 4) ? "yes" : "no");
-    printf("%s\n", is_two_intervals_overlap(2, 4, 1, 3) ? "yes" : "no");
-    printf("%s\n", is_two_intervals_overlap(3, 4, 1, 5) ? "yes" : "no");
-    printf("%s\n", is_two_intervals_overlap(1, 5, 3, 4) ? "yes" : "no");
+    int a, b, c, d;
+    printf("Enter a= "); scanf("%d", &a);
+    printf("Enter b= "); scanf("%d", &b);
+    printf("Enter c= "); scanf("%d", &c);
+    printf("Enter d= "); scanf("%d", &d);
+
+    printf("Result is %s\n", is_two_intervals_overlap(a, b, c, d) ? "yes" : "no");
     return 0;
 }

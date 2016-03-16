@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include <math.h>
 
 struct circle
@@ -16,13 +17,16 @@ bool is_two_circles_overlap(const struct circle *a, const struct circle *b)
     return false;
 }
 
-#if 0
-#include <stdio.h>
 int main(void)
 {
-    struct circle a = {2, 2, 1};
-    struct circle b = {1, 1, 1};
-    printf("%d\n", is_two_circles_overlap(&a, &b));
+    struct circle a, b;
+    printf("Enter a.r= "); scanf("%d", &a.r);
+    printf("Enter a.x= "); scanf("%d", &a.x);
+    printf("Enter a.y= "); scanf("%d", &a.y);
+    printf("Enter b.r= "); scanf("%d", &b.r);
+    printf("Enter b.x= "); scanf("%d", &b.x);
+    printf("Enter b.y= "); scanf("%d", &b.y);
+
+    printf("Result is %s\n", is_two_circles_overlap(&a, &b) ? "yes" : "no");
     return 0;
 }
-#endif
