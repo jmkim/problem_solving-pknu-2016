@@ -1,15 +1,20 @@
+#include <stdio.h>
 #include <stdbool.h>
 
-struct interval
+bool is_two_intervals_overlap(const int a, const int b, const int c, const int d)
 {
-    int begin;
-    int end;
-};
-
-bool is_two_intervals_overlap(const struct interval *a, const struct interval *b)
-{
-    if( (a->begin < b->begin && a->end < b->begin) &&
-        (a->begin > b->begin && a->begin > b->end)) return false;
-
+    if(a < c && b < c || a > c && a > d) return false;
     return true;
+}
+
+int main(void)
+{
+    int a, b, c, d;
+    printf("Enter a= "); scanf("%d", &a);
+    printf("Enter b= "); scanf("%d", &b);
+    printf("Enter c= "); scanf("%d", &c);
+    printf("Enter d= "); scanf("%d", &d);
+
+    printf("Result is %s\n", is_two_intervals_overlap(a, b, c, d) ? "yes" : "no");
+    return 0;
 }

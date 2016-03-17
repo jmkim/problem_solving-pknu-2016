@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 long double calc_pi(const int step)
 {
     /* base case */
@@ -6,4 +8,13 @@ long double calc_pi(const int step)
     /* recursive case */
     long double denominator = ( step % 2 ? 2 * step - 1 : -(2 * step - 1) );
     return calc_pi(step - 1) + 4 / denominator;
+}
+
+int main(void)
+{
+    int n;
+    printf("Enter n= "); scanf("%d", &n);
+
+    printf("Result is %d\n", calc_pi(n));
+    return 0;
 }
