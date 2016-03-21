@@ -7,17 +7,25 @@ int main(void)
     printf("Enter isbn= ");
     scanf("%d", &isbn);
 
-    int sum = 0, base = 1000000000;
+    int sum = 0;
+    int base = 100000000; /* Used to extract each place value */
 
-    for(int i = 10; i >= 2; i--)
+    for(int pos = 10; pos >= 2; pos--)
     {
-        sum += i * (isbn / base);
-        isbn %= base;
+        int digit = isbn / base; /* Extract the highest place value */
+
+        sum += pos * digit;
+
+        isbn %= base; /* Cut out the highest place value */
         base /= 10;
     }
 
+    printf("Result: ");
+
     int checksum = 11 - (sum % 11);
-    printf("Result: %d\n", checksum);
+    putchar((checksum < 10) ? '0' + checksum : 'X'); /* checksum should be in the range 0 to 9 */
+
+    putchar('\n');
 
     return 0;
 }
