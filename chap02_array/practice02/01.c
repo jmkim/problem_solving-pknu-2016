@@ -1,31 +1,46 @@
 #include <stdio.h>
 
+#define MAX_ARRAY_SIZE  100
+
 int main(void)
 {
-    int array[100] = {0, };
+    int data[MAX_ARRAY_SIZE] = {0, };
     int size = 0;
 
-    while(true)
+    while(size < MAX_ARRAY_SIZE)
     {
-        int input;
-        scanf("%d", &input);
-        if(input == -1) break;
+        int input, i, j;
 
-        int i = 0;
-        for(; input < array[i] && i < size; ++i);
-        if(size > 0 && array[i] == input)
         {
-            printf("duplicate entry\n");
-            continue;
+            /* User input */
+            scanf("%d", &input);
+            if(input == -1) break;
         }
 
-        for(int j = size; j > i; --j) array[j] = array[j - 1];
+        {
+            /* Search */
+            for(i = 0; input > data[i] && i < size; ++i); /* Ascend */
+            //for(i = 0; input < data[i] && i < size; ++i); /* Descend */
 
-        array[i] = input;
-        ++size;
+            if(input == data[i] && i < size)
+            {
+                printf("duplicate entry\n");
+                continue;
+            }
+        }
+
+        {
+            /* Input data to data[] */
+            for(j = size; j > i; --j) data[j] = data[j - 1]; /* Pull back */
+            data[j] = input;
+            ++size;
+        }
         
-        for(int j = size - 1; j >= 0; --j) printf("%d ", array[j]);
-        printf("\n");
+        {
+            /* Print all elements */
+            for(j = 0; j < size; ++j) printf("%d ", data[j]);
+            printf("\n");
+        }
     }
 
     return 0;
