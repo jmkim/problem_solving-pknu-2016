@@ -1,8 +1,8 @@
-/*
+/**
     Othello
 */
 
-#include <stdio.h>
+#include <stdio.h> /** printf, scanf, fscanf */
 
 
 /** Macros */
