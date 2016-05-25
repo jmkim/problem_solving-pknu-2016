@@ -53,6 +53,7 @@ read_cards (void)
 {
   char ch, rank_ch, suit_ch;
   int rank, suit;
+  int cards[NUM_RANKS][NUM_SUITS] = { 0, };
   int cards_read = 0;
 
   init_data ();
@@ -130,9 +131,17 @@ read_cards (void)
 	     suit_ch);
 	  continue;
 	}
-      num_in_rank[rank]++;
-      num_in_suit[suit]++;
-      cards_read++;
+
+      if (cards[rank][suit] >= 1)
+	{
+	  printf ("Error: '%c - %c' is already yours..\n", rank_ch, suit_ch);
+	  continue;
+	}
+
+      ++num_in_rank[rank];
+      ++num_in_suit[suit];
+      ++cards[rank][suit];
+      ++cards_read;
     }
 }
 
@@ -212,6 +221,20 @@ count_pairs (void)
 void
 analyze_hand (void)
 {
+  if (check_flush ())
+    printf ("Flush\n");
+  else if (check_straight ())
+    printf ("Straight\n");
+  else if (check_four_cards ())
+    printf ("Four cards\n");
+  else if (check_three_cards ())
+    printf ("Three cards\n");
+  else if (count_pairs () == 2)
+    printf ("Two pair\n");
+  else if (count_pairs () == 1)
+    printf ("One pair\n");
+  else
+    printf ("None\n");
 }
 
 int
