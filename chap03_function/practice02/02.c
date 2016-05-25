@@ -38,7 +38,6 @@ main(void)
     printf("Enter numbers (delims by whitespace)= ");
     for(i = 0; i < n; ++i)
     {
-        printf("%d %d %d\n", i, n, i < n);
         scanf("%d", &numbers[i]);
     }
 
