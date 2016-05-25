@@ -8,7 +8,7 @@ template<
     size_t  BoardSize = 19              /**< Size of the board */
 >
 class Gomoku
-//: public GameInterface<unsigned int>
+: public GameInterface
 {
 public:
     typedef unsigned int    PosType;    /**< Position type */
@@ -152,6 +152,7 @@ public:
 
     /** Restart the game */
     inline
+    virtual
     void
     Restart(void)
     {
@@ -162,6 +163,7 @@ public:
 
     /** Skip to next player */
     inline
+    virtual
     void
     TurnToNext(void)
     { current_turn_ = (current_turn_ == BLACK) ? WHITE : BLACK; }
@@ -181,6 +183,7 @@ public:
         \return     true if the game running; otherwise false
     */
     inline
+    virtual
     bool
     IsRunning(void)
     const
