@@ -1,3 +1,6 @@
+namespace game
+{
+
 template<class PlayerType>
 class GameInterface
 {
@@ -8,3 +11,5 @@ public:
     virtual bool        IsRunning(void)     = 0;
     virtual PlayerType  Winner(void)        = 0;
 };
+
+} /** ns: game */

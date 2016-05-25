@@ -1,5 +1,14 @@
+#include "game.hpp"
+#include <cstddef>
+
+namespace game
+{
+
+template<
+    size_t  BoardSize = 19              /**< Size of the board */
+>
 class Gomoku
-: public GameInterface<unsigned int>
+//: public GameInterface<unsigned int>
 {
 public:
     typedef unsigned int    PosType;    /**< Position type */
@@ -23,15 +32,14 @@ public:
     };
 
 protected:
-    SizeType    size_;          /**< Size of the board */
-    PosType **  board_;         /**< Board */
-    PlayerType  current_turn_;  /**< Current turn player */
-    bool        is_running_;    /**< Is the game running?
+    PlayerType **   board_;         /**< Board */
+    PlayerType      current_turn_;  /**< Current turn player */
+    bool            is_running_;    /**< Is the game running?
 
-                                    Currently, the game is stopped with these causes:
-                                     *  The winner is set.
-                                        In this case, the winner is the player `current_turn_'.
-                                */
+                                         Currently, the game is stopped with these causes:
+                                         *  The winner is set.
+                                            In this case, the winner is the player `current_turn_'.
+                                    */
 
     /** Allocate the memory for the game board */
     void
@@ -39,10 +47,10 @@ protected:
     {
         if(board_ == nullptr)
         {
-            board_ = new PosType*[size_];
+            board_ = new PlayerType*[BoardSize];
 
-            for(PosType i = 0; i < size_; ++i)
-                board[i] = new PosType[size_];
+            for(PosType i = 0; i < BoardSize; ++i)
+                board_[i] = new PlayerType[BoardSize];
         }
     }
 
@@ -50,20 +58,20 @@ protected:
     void
     FreeBoard(void)
     {
-        for(PosType i = 0; i < size_; ++i)
+        for(PosType i = 0; i < BoardSize; ++i)
             delete[] board_[i];
 
-        delete[] board;
+        delete[] board_;
     }
 
     /** Initialise the board */
     void
     InitBoard(void)
     {
-        for(PosType i = 0; i < size_; ++i)
+        for(PosType i = 0; i < BoardSize; ++i)
         {
-            for(PosType j = 0; j < size_; ++j)
-                board[i][j] = NONE; /** Initialise to player `NONE' */
+            for(PosType j = 0; j < BoardSize; ++j)
+                board_[i][j] = NONE; /** Initialise to player `NONE' */
         }
     }
 
@@ -87,18 +95,28 @@ protected:
     void
     CheckWin(const PosType & x, const PosType & y)
     {
-        for(DirectionType dir = N; dir < S; ++dir)
+        for(int dir = N; dir < S; ++dir)
         {
             PlayerType stone[11];
 
             for(int i = -5; i <= 5; ++i)
             {
+                if(x + i < 0 ||
+                   x - i < 0 ||
+                   x + i > BoardSize ||
+                   x - i > BoardSize ||
+                   y + i < 0 ||
+                   y - i < 0 ||
+                   y + i > BoardSize||
+                   y - i > BoardSize)
+                    continue;
+
                 switch(dir)
                 {
-                case N:  stone[i + 5] = board_[x + i   , y    ]; break;
-                case NE: stone[i + 5] = board_[x - i   , y + i]; break;
-                case E:  stone[i + 5] = board_[x, y + i       ]; break;
-                case SE: stone[i + 5] = board_[x + i   , y + i]; break;
+                case N:  stone[i + 5] = board_[x + i][y    ]; break;
+                case NE: stone[i + 5] = board_[x - i][y + i]; break;
+                case E:  stone[i + 5] = board_[x    ][y + i]; break;
+                case SE: stone[i + 5] = board_[x + i][y + i]; break;
                 }
             }
 
@@ -112,16 +130,15 @@ protected:
                 }
 
                 if(i == j - 1)
-                    return is_running_ = false; /** Stop the game; current player is the winner */
+                    is_running_ = false; /** Stop the game; current player is the winner */
             }
         }
     }
 
 public:
     /** Constructor */
-    Gomoku(SizeType & size_of_board = 19)
-    : size_         (size_of_board)
-    , board_        (nullptr)
+    Gomoku(void)
+    : board_        (nullptr)
     , current_turn_ (BLACK) /** First turn is player `BLACK' */
     , is_running_   (true)
     { 
@@ -178,16 +195,16 @@ public:
     StatusType
     PutStone(const PosType & x, const PosType & y)
     {
-        if(IsRunning())
+        if(! IsRunning())
             return E_GAME_NOT_RUNNING;
 
         if(IsStoneExist(x, y))
             return E_POSITION_ERROR;
 
         board_[x][y] = CurrentTurn();
-        CheckWin();
+        CheckWin(x, y);
 
-        if(IsRunning())
+        if(! IsRunning())
             return E_GAME_NOT_RUNNING; /** Winner is set; current player is the winner */
         else
         {
@@ -211,12 +228,14 @@ public:
         \param[in]  out_array   2-dimension array to copy the current board
     */
     void
-    CopyBoard(PosType out_array[size_][size_])
+    CopyBoard(PosType out_array[BoardSize][BoardSize])
     {
-        for(PosType i = 0; i < size_; ++i)
+        for(PosType i = 0; i < BoardSize; ++i)
         {
-            for(PosType j = 0; j < size_; ++j)
+            for(PosType j = 0; j < BoardSize; ++j)
                 out_array[i][j] = board_[i][j];
         }
     }
 };
+
+} /** ns: game */
