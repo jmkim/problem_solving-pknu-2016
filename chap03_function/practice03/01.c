@@ -160,7 +160,7 @@ check_straight (void)
 
 
   int count = 1;
-  int i, j, l;
+  int i, j;
   int cards[NUM_CARDS] = { 0, };
   int ck = 0;
 
