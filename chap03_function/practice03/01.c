@@ -14,8 +14,15 @@ int num_in_suit[NUM_SUITS];
 
 
 /** Declarations */
+void init_data (void);
 void read_cards (void);
+int check_flush (void);
+int check_straight (void);
+int check_four_cards (void);
+int check_three_cards (void);
+int count_pairs (void);
 void analyze_hand (void);
+void sort (int arr[], const int size);
 
 
 /** Definitions */
@@ -30,11 +37,13 @@ main (void)
 }
 
 void
-init_data ()
+init_data (void)
 {
   int rank, suit;
+
   for (rank = 0; rank < NUM_RANKS; rank++)
     num_in_rank[rank] = 0;
+
   for (suit = 0; suit < NUM_SUITS; suit++)
     num_in_suit[suit] = 0;
 }
@@ -44,8 +53,9 @@ read_cards (void)
 {
   char ch, rank_ch, suit_ch;
   int rank, suit;
-  init_data ();
   int cards_read = 0;
+
+  init_data ();
 
   while (cards_read < NUM_CARDS)
     {
@@ -92,6 +102,11 @@ read_cards (void)
 	case 'k':
 	  rank = 13;
 	  break;
+	default:
+	  printf
+	    ("Error: Unknown card rank '%c'. (Available rank: 0~9, t, j, q, k)\n",
+	     rank_ch);
+	  continue;
 	}
 
       scanf (" %c", &suit_ch);
@@ -109,6 +124,11 @@ read_cards (void)
 	case 's':
 	  suit = 3;
 	  break;
+	default:
+	  printf
+	    ("Error: Unknown card rank '%c'. (Available suit: c, d, h, s)\n",
+	     suit_ch);
+	  continue;
 	}
       num_in_rank[rank]++;
       num_in_suit[suit]++;
@@ -118,34 +138,110 @@ read_cards (void)
 
 /** Return 1 if flush; otherwise return 0 */
 int
-check_flush ()
+check_flush (void)
 {
+  return check_cards (num_in_suit, NUM_SUITS, 5);
 }
 
 /** Return 1 if staight; otherwise return 0 */
 int
-check_straight ()
+check_straight (void)
 {
+  int count = 1;
+  int i;
+
+  for (i = 0; i + 1 < NUM_CARDS; ++i)
+    {
+      while (i + 1 < NUM_CARDS && num_in_rank[i] == num_in_rank[i + 1])
+	++i;
+
+      if (i + 1 >= NUM_CARDS)
+	break;
+
+      if (num_in_rank[i + 1] == num_in_rank[i] + 1)
+	++count;
+      else
+	{
+	  if (count >= 5)
+	    break;
+	  else
+	    count = 1;
+	}
+    }
+
+  return ((count >= 5) ? 1 : 0);
 }
 
 int
-check_four_cards ()
+check_four_cards (void)
 {
+  return check_cards (num_in_rank, NUM_RANKS, 4);
 }
 
 int
-check_three_cards ()
+check_three_cards (void)
 {
+  return check_cards (num_in_rank, NUM_RANKS, 3);
 }
 
 /** Return 1 if one pair, 2 if two pair; otherwise return 0 */
 int
-count_pairs ()
+count_pairs (void)
 {
+  int count = 0;
+  int i;
+
+  for (i = 0; i < NUM_RANKS; ++i)
+    {
+      if (check_cards (num_in_rank, NUM_RANKS, 2) && !check_three_cards ())
+	++count;
+    }
+
+  switch (count)
+    {
+    case 1:
+      return 1;
+    case 2:
+      return 2;
+    default:
+      return 0;
+    }
 }
 
-/** Print the hightest score card, using above functions */
+/** Print the highest score cards, using above functions */
 void
 analyze_hand (void)
 {
+}
+
+int
+check_cards (const int cards[], const int cards_size, const int count)
+{
+  int i;
+
+  for (i = 0; i < cards_size; ++i)
+    {
+      if (cards[i] > count)
+	return 1;
+    }
+
+  return 0;
+}
+
+void
+sort (int arr[], const int size)
+{
+  int i, j, t;
+  for (i = size - 1; i >= 0; --i)
+    {
+      for (j = 0; j <= i; ++j)
+	{
+	  if (arr[j] > arr[i])
+	    {
+	      t = arr[i];
+	      arr[i] = arr[j];
+	      arr[j] = t;
+	    }
+	}
+    }
 }
