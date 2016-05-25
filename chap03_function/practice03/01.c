@@ -22,6 +22,7 @@ int check_four_cards (void);
 int check_three_cards (void);
 int count_pairs (void);
 void analyze_hand (void);
+int check_cards (const int num_in[], const int num_in_size, const int count);
 void sort (int arr[], const int size);
 
 
