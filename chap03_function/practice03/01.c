@@ -157,18 +157,33 @@ check_flush (void)
 int
 check_straight (void)
 {
+
+
   int count = 1;
-  int i;
+  int i, j, l;
+  int cards[NUM_CARDS] = { 0, };
+  int ck = 0;
+
+  for (i = 0; i < NUM_RANKS; ++i)
+    {
+      for (j = 1; j <= NUM_SUITS; ++j)
+	{
+	  if (num_in_rank[i] >= j)
+	    cards[ck++] = i;
+	}
+    }
+
+  sort (cards, NUM_CARDS);
 
   for (i = 0; i + 1 < NUM_CARDS; ++i)
     {
-      while (i + 1 < NUM_CARDS && num_in_rank[i] == num_in_rank[i + 1])
+      while (i + 1 < NUM_CARDS && cards[i] == cards[i + 1])
 	++i;
 
       if (i + 1 >= NUM_CARDS)
 	break;
 
-      if (num_in_rank[i + 1] == num_in_rank[i] + 1)
+      if (cards[i + 1] == cards[i] + 1)
 	++count;
       else
 	{
