@@ -105,7 +105,7 @@ read_cards (void)
 	  break;
 	default:
 	  printf
-	    ("Error: Unknown card rank '%c'. (Available rank: 0~9, t, j, q, k)\n",
+	    ("Error: Unknown card rank '%c'. (Available rank: 0, a, 2~9, t, j, q, k)\n",
 	     rank_ch);
 	  continue;
 	}
@@ -127,7 +127,7 @@ read_cards (void)
 	  break;
 	default:
 	  printf
-	    ("Error: Unknown card rank '%c'. (Available suit: c, d, h, s)\n",
+	    ("Error: Unknown card suit '%c'. (Available suit: c, d, h, s)\n",
 	     suit_ch);
 	  continue;
 	}
@@ -149,7 +149,7 @@ read_cards (void)
 int
 check_flush (void)
 {
-  return check_cards (num_in_suit, NUM_SUITS, 5);
+  return (check_cards (num_in_suit, NUM_SUITS, 5) ? 1 : 0);
 }
 
 /** Return 1 if staight; otherwise return 0 */
@@ -184,34 +184,25 @@ check_straight (void)
 int
 check_four_cards (void)
 {
-  return check_cards (num_in_rank, NUM_RANKS, 4);
+  return (check_cards (num_in_rank, NUM_RANKS, 4) ? 1 : 0);
 }
 
 int
 check_three_cards (void)
 {
-  return check_cards (num_in_rank, NUM_RANKS, 3);
+  return (check_cards (num_in_rank, NUM_RANKS, 3) ? 1 : 0);
 }
 
 /** Return 1 if one pair, 2 if two pair; otherwise return 0 */
 int
 count_pairs (void)
 {
-  int count = 0;
-  int i;
-
-  for (i = 0; i < NUM_RANKS; ++i)
+  switch (check_cards (num_in_rank, NUM_RANKS, 2))
     {
-      if (check_cards (num_in_rank, NUM_RANKS, 2) && !check_three_cards ())
-	++count;
-    }
-
-  switch (count)
-    {
-    case 1:
-      return 1;
     case 2:
       return 2;
+    case 1:
+      return 1;
     default:
       return 0;
     }
@@ -238,17 +229,18 @@ analyze_hand (void)
 }
 
 int
-check_cards (const int cards[], const int cards_size, const int count)
+check_cards (const int num_in[], const int num_in_size, const int count)
 {
+  int c = 0;
   int i;
 
-  for (i = 0; i < cards_size; ++i)
+  for (i = 0; i < num_in_size; ++i)
     {
-      if (cards[i] > count)
-	return 1;
+      if (num_in[i] == count)
+	++c;
     }
 
-  return 0;
+  return c;
 }
 
 void
